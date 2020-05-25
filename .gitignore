@@ -1,1 +1,4 @@
 .idea/
+
+# Ignore vscode files
+.vscode

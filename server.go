@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"github.com/bettercap/gatt/linux/cmd"
-	"github.com/bettercap/gatt"
 	"pm5-emulator/service"
+
+	"github.com/bettercap/gatt"
+	"github.com/bettercap/gatt/linux/cmd"
 )
 
 func main() {
@@ -26,8 +27,11 @@ func main() {
 		switch s {
 		case gatt.StatePoweredOn:
 			// Setup GAP and GATT services for PM5
-			_=d.AddService(service.NewGapService("PM5 430000000"))
-			_=d.AddService(service.NewGattService())
+			_ = d.AddService(service.NewGapService("PM5 430000000"))
+			_ = d.AddService(service.NewGattService())
+
+			// Setup Device info service for PM5
+			_ = d.AddService(service.NewDevInfoService())
 
 			// A fake battery service for demo.
 			s1 := service.NewBatteryService()
@@ -47,7 +51,6 @@ func main() {
 	select {}
 }
 
-
 //BLE Server Options
 var DefaultServerOptions = []gatt.Option{
 	gatt.LnxMaxConnections(1),
@@ -58,4 +61,3 @@ var DefaultServerOptions = []gatt.Option{
 		AdvertisingChannelMap:  0x7,
 	}),
 }
-
