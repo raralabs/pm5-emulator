@@ -4,7 +4,7 @@ Emulating PM5 Rower via GATT server in BLE Device
 
 **Instructions to Run** 
 ```cassandraql
-sudo go run server.go 
+sudo go run cmd/pm5-emulator/main.go 
 ```
 
 
