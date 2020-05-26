@@ -1,4 +1,5 @@
+#IDE and Editors
 .idea/
-
-# Ignore vscode files
 .vscode
+#project
+vendor/
