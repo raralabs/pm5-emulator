@@ -1,6 +1,10 @@
 package service
 
-import "github.com/bettercap/gatt"
+import (
+	"fmt"
+
+	"github.com/bettercap/gatt"
+)
 
 func NewBatteryService() *gatt.Service {
 	lv := byte(100)
@@ -11,6 +15,10 @@ func NewBatteryService() *gatt.Service {
 			rsp.Write([]byte{lv})
 			lv--
 		})
+	c.HandleWriteFunc(func(r gatt.Request, data []byte) (status byte) {
+		fmt.Println(data)
+		return 0x00
+	})
 
 	// Characteristic User Description
 	c.AddDescriptor(gatt.UUID16(0x2901)).SetStringValue("Battery level between 0 and 100 percent")

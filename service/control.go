@@ -1,8 +1,10 @@
 package service
 
 import (
-	"github.com/bettercap/gatt"
+	"fmt"
 	"log"
+
+	"github.com/bettercap/gatt"
 )
 
 /*
@@ -24,7 +26,11 @@ func NewControlService() *gatt.Service {
 	*/
 	receiveChar := s.AddCharacteristic(attrReceiveCharacteristicsUUID)
 	receiveChar.HandleWriteFunc(func(r gatt.Request, data []byte) (status byte) {
-		log.Println("[[Control]] received char : ", string(data))
+		fmt.Print("[[Control]:0021] received char : [ ")
+		for _, d := range data {
+			fmt.Printf("%x ", d)
+		}
+		fmt.Println("]")
 		return gatt.StatusSuccess
 	})
 
@@ -35,7 +41,7 @@ func NewControlService() *gatt.Service {
 	transmitChar.HandleReadFunc(func(resp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		data := make([]byte, 20)
 		resp.Write(data)
-		log.Println("[[Control]] Transmitting Data")
+		log.Println("[[Control]:0022] Transmitting Data")
 	})
 
 	return s

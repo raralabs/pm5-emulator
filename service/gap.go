@@ -4,7 +4,6 @@ import (
 	"github.com/bettercap/gatt"
 )
 
-
 //PM5 GAP Server UUIDs
 var (
 	attrGAPUUID, _               = gatt.ParseUUID(getFullUUID("1800"))

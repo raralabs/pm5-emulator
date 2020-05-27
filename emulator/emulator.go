@@ -2,21 +2,18 @@ package emulator
 
 import (
 	"fmt"
-	"github.com/bettercap/gatt"
-	"github.com/bettercap/gatt/linux/cmd"
 	"log"
 	"pm5-emulator/config"
 	"pm5-emulator/service"
+
+	"github.com/bettercap/gatt"
+	"github.com/bettercap/gatt/linux/cmd"
 )
 
-
-
-type Emulator struct{
-	
+type Emulator struct {
 }
 
-
-func (em *Emulator) RunEmulator(){
+func (em *Emulator) RunEmulator() {
 	d, err := gatt.NewDevice(defaultServerOptions...)
 	if err != nil {
 		log.Fatalf("Failed to open config, err: %s", err)
@@ -24,7 +21,7 @@ func (em *Emulator) RunEmulator(){
 
 	// Register optional handlers.
 	d.Handle(
-		gatt.PeripheralConnected(func(p gatt.Peripheral, err error){log.Println("|Connect|: ") }),
+		gatt.PeripheralConnected(func(p gatt.Peripheral, err error) { log.Println("|Connect|: ") }),
 		gatt.CentralConnected(func(c gatt.Central) { log.Println("|Connect|: ", c.ID()) }),
 		gatt.CentralDisconnected(func(c gatt.Central) { log.Println("|Disconnect|: ", c.ID()) }),
 	)
@@ -39,7 +36,7 @@ func (em *Emulator) RunEmulator(){
 			_ = d.AddService(service.NewGattService())
 
 			// Setup Device info service for PM5
-			s1:=service.NewDevInfoService()
+			s1 := service.NewDevInfoService()
 			d.AddService(s1)
 
 			s2:=service.NewControlService()
@@ -75,4 +72,3 @@ var defaultServerOptions = []gatt.Option{
 		AdvertisingChannelMap:  0x7,
 	}),
 }
-

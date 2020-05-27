@@ -6,7 +6,6 @@ import (
 	"github.com/bettercap/gatt"
 )
 
-
 //PM5 Device Info Server UUIDs
 var (
 	attrDeviceInfoUUID, _       = gatt.ParseUUID(getFullUUID("0010"))

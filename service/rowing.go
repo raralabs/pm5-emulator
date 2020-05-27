@@ -1,8 +1,9 @@
 package service
 
 import (
-	"github.com/bettercap/gatt"
 	"log"
+
+	"github.com/bettercap/gatt"
 )
 
 /*
