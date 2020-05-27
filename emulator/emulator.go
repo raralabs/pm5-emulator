@@ -42,12 +42,18 @@ func (em *Emulator) RunEmulator(){
 			s1:=service.NewDevInfoService()
 			d.AddService(s1)
 
-			// A fake battery service for demo.
-			s2 := service.NewBatteryService()
+			s2:=service.NewControlService()
 			d.AddService(s2)
 
+			s3:=service.NewRowingService()
+			d.AddService(s3)
+
+			// A fake battery service for demo.
+			s4 := service.NewBatteryService()
+			d.AddService(s4)
+
 			// Advertise config name and service's UUIDs.
-			d.AdvertiseNameAndServices(config.NAME, []gatt.UUID{s1.UUID(), s2.UUID()})
+			d.AdvertiseNameAndServices(config.NAME, []gatt.UUID{s1.UUID(), s2.UUID(),s3.UUID(),s4.UUID()})
 
 			// Advertise as an OpenBeacon iBeacon
 			d.AdvertiseIBeacon(gatt.MustParseUUID("CE061800-43E5-11E4-916C-0800200C9A66"), 1, 2, -59)
