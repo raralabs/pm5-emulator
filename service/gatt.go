@@ -7,9 +7,9 @@ import (
 
 //PM5 GATT Server UUIDs
 var (
-	attrGATTUUID,_=gatt.ParseUUID("CE061801-43E5-11E4-916C-0800200C9A66")
-	attrServiceChangedUUID,_=gatt.ParseUUID("CE062A05-43E5-11E4-916C-0800200C9A66")
-	attrGATTClientConfigChar,_=gatt.ParseUUID("CE062902-43E5-11E4-916C-0800200C9A66")
+	attrGATTUUID,_=gatt.ParseUUID(getFullUUID("1801"))
+	attrServiceChangedUUID,_=gatt.ParseUUID(getFullUUID("2A05"))
+	attrGATTClientConfigChar,_=gatt.ParseUUID(getFullUUID("2902"))
 )
 
 // NewGattService registers a new GATT service as per PM5 specs
