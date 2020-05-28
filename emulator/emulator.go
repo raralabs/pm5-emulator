@@ -3,31 +3,23 @@ package emulator
 import (
 	"fmt"
 	"github.com/bettercap/gatt"
-	"github.com/bettercap/gatt/linux/cmd"
 	"log"
 	"pm5-emulator/config"
 	"pm5-emulator/service"
+	"pm5-emulator/sm"
 )
 
-
-
+//Emulator
 type Emulator struct{
-	
+	device gatt.Device
+	stateMachine *sm.StateMachine
 }
 
-
+//RunEmulator registers handlers and starts advertising services
 func (em *Emulator) RunEmulator(){
-	d, err := gatt.NewDevice(defaultServerOptions...)
-	if err != nil {
-		log.Fatalf("Failed to open config, err: %s", err)
-	}
 
-	// Register optional handlers.
-	d.Handle(
-		gatt.PeripheralConnected(func(p gatt.Peripheral, err error){log.Println("|Connect|: ") }),
-		gatt.CentralConnected(func(c gatt.Central) { log.Println("|Connect|: ", c.ID()) }),
-		gatt.CentralDisconnected(func(c gatt.Central) { log.Println("|Disconnect|: ", c.ID()) }),
-	)
+	//register optional handlers
+	em.registerHandlers()
 
 	// handler for monitoring config state.
 	onStateChanged := func(d gatt.Device, s gatt.State) {
@@ -62,17 +54,27 @@ func (em *Emulator) RunEmulator(){
 		}
 	}
 
-	d.Init(onStateChanged)
+	em.device.Init(onStateChanged)
 }
 
-//BLE Server Options
-var defaultServerOptions = []gatt.Option{
-	gatt.LnxMaxConnections(1),
-	gatt.LnxDeviceID(-1, true),
-	gatt.LnxSetAdvertisingParameters(&cmd.LESetAdvertisingParameters{
-		AdvertisingIntervalMin: 0x00f4,
-		AdvertisingIntervalMax: 0x00f4,
-		AdvertisingChannelMap:  0x7,
-	}),
+//registerHandlers registers optional handlers for handling device connection and disconnection
+func (em *Emulator) registerHandlers(){
+	// Register optional handlers.
+	em.device.Handle(
+		gatt.PeripheralConnected(func(p gatt.Peripheral, err error){
+			log.Println("|Peripheral Connected|: ")
+			fmt.Println("ID: ",p.ID())
+			fmt.Println("Device: ",p.Device())
+			fmt.Println("Name: ",p.Name())
+		}),
+		gatt.CentralConnected(func(c gatt.Central) {
+			log.Println("|Device Connected| ID=> ", c.ID())
+			fmt.Println("MTU: ",c.MTU())
+		}),
+		gatt.CentralDisconnected(func(c gatt.Central) {
+			log.Println("|Device Disconnected| ID=> ", c.ID())
+			fmt.Println("MTU: ",c.MTU())
+		}),
+	)
 }
 
