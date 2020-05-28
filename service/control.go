@@ -31,7 +31,7 @@ func NewControlService() *gatt.Service {
 	receiveChar.HandleWriteFunc(func(r gatt.Request, data []byte) (status byte) {
 		pck, err := csafeDec.Decode(data)
 
-		str := fmt.Sprintf("Decoded Control Command: 0x%x Data: [ ", pck.Cmd)
+		str := fmt.Sprintf("[[Control]] Decoded Command: 0x%x Data: [ ", pck.Cmd)
 		for i := 0; i < len(pck.Data); i++ {
 			str = fmt.Sprintf("%s0x%x ", str, pck.Data[i])
 		}

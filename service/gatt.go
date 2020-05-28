@@ -29,10 +29,12 @@ func NewGattService() *gatt.Service {
 
 	c.HandleReadFunc(
 		func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+			log.Println("[[GATT]] Client Configuration Read")
 			rsp.Write([]byte{lv})
 			lv--
 		})
 	c.HandleWriteFunc(func(r gatt.Request, data []byte) (status byte) {
+		log.Println("[[GATT]] Client Configuration Write")
 		fmt.Println(data)
 		return 0x00
 	})

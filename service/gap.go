@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/bettercap/gatt"
 )
 
@@ -19,10 +21,56 @@ var gapCharAppearanceGenericComputer = []byte{0x00, 0x00}
 //NewGapService registers a new GAP service as per PM5 specs
 func NewGapService(name string) *gatt.Service {
 	s := gatt.NewService(attrGAPUUID)
-	s.AddCharacteristic(attrDeviceNameUUID).SetValue([]byte(name))                                               //x2A00
-	s.AddCharacteristic(attrAppearanceUUID).SetValue(gapCharAppearanceGenericComputer)                           //x2A01
-	s.AddCharacteristic(attrPeripheralPrivacyUUID).SetValue([]byte{0x00})                                        //x2A02
-	s.AddCharacteristic(attrReconnectionAddrUUID).SetValue([]byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00})           // x2A03
-	s.AddCharacteristic(attrPeferredParamsUUID).SetValue([]byte{0x00, 0x18, 0x00, 0x18, 0x00, 0x00, 0x03, 0xE8}) //x2A04
+
+	/*
+		GAP: Device Name characteristic
+	*/
+	devNameChar := s.AddCharacteristic(attrDeviceNameUUID)
+	devNameChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		log.Println("[[GAP]] Device Name Read")
+		data := []byte(name)
+		rsp.Write(data)
+	})
+
+	/*
+		GAP: Device Name characteristic
+	*/
+	appearanceChar := s.AddCharacteristic(attrAppearanceUUID)
+	appearanceChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		log.Println("[[GAP]] Appearance Read")
+		data := []byte{0x00, 0x00}
+		rsp.Write(data)
+	})
+
+	/*
+		GAP: Device Name characteristic
+	*/
+	ppChar := s.AddCharacteristic(attrPeripheralPrivacyUUID)
+	ppChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		log.Println("[[GAP]] Peripheral Privacy Read")
+		data := []byte{0x00}
+		rsp.Write(data)
+	})
+
+	/*
+		GAP: Reconnect Address characteristic
+	*/
+	reconAddrChar := s.AddCharacteristic(attrReconnectionAddrUUID)
+	reconAddrChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		log.Println("[[GAP]] Reconnect Address Read")
+		data := []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+		rsp.Write(data)
+	})
+
+	/*
+		GAP: Peripheral Preferred Connection Parameters characteristic
+	*/
+	prefParamChar := s.AddCharacteristic(attrPeferredParamsUUID)
+	prefParamChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		log.Println("[[GAP]] Preferred Connection Read")
+		data := []byte{0x00, 0x18, 0x00, 0x18, 0x00, 0x00, 0x03, 0xE8}
+		rsp.Write(data)
+	})
+
 	return s
 }
