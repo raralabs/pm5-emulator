@@ -32,5 +32,6 @@ This error is due to blocked bluetooth service. Try ```rfkill unblock bluetooth`
 
 [Intro to GATT](https://www.oreilly.com/library/view/getting-started-with/9781491900550/ch04.html)
 
+[BLE Stack](https://www.mathworks.com/help/comm/examples/ble-l2cap-frame-generation-and-decoding.html)
 
 

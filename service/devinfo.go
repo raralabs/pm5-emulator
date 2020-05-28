@@ -1,9 +1,8 @@
 package service
 
 import (
-	"pm5-emulator/config"
-
 	"github.com/bettercap/gatt"
+	"pm5-emulator/config"
 )
 
 //PM5 Device Info Server UUIDs
