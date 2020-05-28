@@ -64,16 +64,16 @@ func (cp *Encoder) getType(tpe string) byte {
 func (cp *Encoder) Encode(p Packet) []byte {
 	var buffer []byte // The Payload
 
-	if len(p.data) > 255 {
+	if len(p.Data) > 255 {
 		panic("Can only send max 255 data at a time")
 	}
 
-	buffer = append(buffer, p.cmd)             // command
+	buffer = append(buffer, p.Cmd)             // command
 	buffer = append(buffer, byte(len(buffer))) // Data Byte Count
 
-	if len(p.data) > 0 {
-		for i := 0; i < len(p.data); i++ {
-			buffer = append(buffer, p.data[i]) // data bytes
+	if len(p.Data) > 0 {
+		for i := 0; i < len(p.Data); i++ {
+			buffer = append(buffer, p.Data[i]) // data bytes
 		}
 	}
 

@@ -3,8 +3,8 @@ package csafe
 type Command []byte
 
 type Packet struct {
-	data []byte
-	cmd  byte
+	Data []byte
+	Cmd  byte
 }
 
 //CSAFE

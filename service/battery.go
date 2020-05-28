@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/bettercap/gatt"
 )
@@ -16,7 +16,7 @@ func NewBatteryService() *gatt.Service {
 			lv--
 		})
 	c.HandleWriteFunc(func(r gatt.Request, data []byte) (status byte) {
-		fmt.Println(data)
+		log.Println(data)
 		return 0x00
 	})
 

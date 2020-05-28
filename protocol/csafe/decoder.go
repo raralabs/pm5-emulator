@@ -41,13 +41,13 @@ func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 	dataLen := pck[1]
 
 	p := &Packet{
-		data: make([]byte, dataLen),
-		cmd:  cmd,
+		Data: make([]byte, dataLen),
+		Cmd:  cmd,
 	}
 
 	// Extract data
 	for i := 0; i < int(dataLen); i++ {
-		p.data[i] = pck[2+i]
+		p.Data[i] = pck[2+i]
 	}
 
 	return p, nil

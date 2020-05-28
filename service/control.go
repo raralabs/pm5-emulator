@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"log"
+	"pm5-emulator/protocol/csafe"
 
 	"github.com/bettercap/gatt"
 )
@@ -24,13 +25,20 @@ func NewControlService() *gatt.Service {
 	/*
 		C2 PM receive characteristic
 	*/
+	csafeDec := csafe.Decoder{}
+
 	receiveChar := s.AddCharacteristic(attrReceiveCharacteristicsUUID)
 	receiveChar.HandleWriteFunc(func(r gatt.Request, data []byte) (status byte) {
-		fmt.Print("[[Control]:0021] received char : [ ")
-		for _, d := range data {
-			fmt.Printf("%x ", d)
+		pck, err := csafeDec.Decode(data)
+
+		str := fmt.Sprintf("Decoded Control Command: 0x%x Data: [ ", pck.Cmd)
+		for i := 0; i < len(pck.Data); i++ {
+			str = fmt.Sprintf("%s0x%x ", str, pck.Data[i])
 		}
-		fmt.Println("]")
+		str = fmt.Sprintf("%s] Error: %v", str, err)
+
+		log.Println(str)
+
 		return gatt.StatusSuccess
 	})
 
