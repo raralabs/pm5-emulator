@@ -6,6 +6,8 @@ import (
 	"pm5-emulator/protocol/csafe"
 
 	"github.com/bettercap/gatt"
+
+	"github.com/bettercap/gatt"
 )
 
 /*
