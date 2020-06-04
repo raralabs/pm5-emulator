@@ -14,6 +14,7 @@ import (
 var (
 	attrRowingServiceUUID, _                                    = gatt.ParseUUID(getFullUUID("0030"))
 	attrGeneralStatusCharacteristicsUUID, _                     = gatt.ParseUUID(getFullUUID("0031"))
+	attrGeneralStatusDescriptorUUID, _                          = gatt.ParseUUID(getFullUUID("2902"))
 	attrAdditionalStatus1CharacteristicsUUID, _                 = gatt.ParseUUID(getFullUUID("0032"))
 	attrAdditionalStatus2CharacteristicsUUID, _                 = gatt.ParseUUID(getFullUUID("0033"))
 	attrSampleRateCharacteristicsUUID, _                        = gatt.ParseUUID(getFullUUID("0034"))
@@ -42,6 +43,8 @@ func NewRowingService() *gatt.Service {
 			log.Println("[[Rowing]] General Status Char Read Request")
 		})
 
+	rowingGenStatusChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
+
 	/*
 		C2 rowing additional status 1 characteristic
 	*/
@@ -51,6 +54,8 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 		log.Println("[[Rowing]] Additional Status 1 Char Read Request")
 	})
+
+	additionalStatus1Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional status 2 characteristic
@@ -62,6 +67,7 @@ func NewRowingService() *gatt.Service {
 		log.Println("[[Rowing]] Additional Status 2 Status Char Read Request")
 	})
 
+	additionalStatus2Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing general status and additional status sample rate characteristic
 	*/
@@ -82,6 +88,8 @@ func NewRowingService() *gatt.Service {
 		log.Println("[[Rowing]] Stroke Data char Read Request")
 	})
 
+	strokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
+
 	/*
 		C2 rowing additional stroke data characteristic
 	*/
@@ -91,6 +99,8 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 		log.Println("[[Rowing]] Additional Stroke Data char Read Request")
 	})
+
+	additionalStrokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing split/interval data characteristic
@@ -102,6 +112,8 @@ func NewRowingService() *gatt.Service {
 		log.Println("[[Rowing]] Split/Interval Data char Read Request")
 	})
 
+	splitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
+
 	/*
 		C2 rowing additional split/interval data characteristic
 	*/
@@ -112,6 +124,7 @@ func NewRowingService() *gatt.Service {
 		log.Println("[[Rowing]] Additional Split/Interval Data char Read Request")
 	})
 
+	additionalSplitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing end of workout summary data characteristic
 	*/
@@ -122,6 +135,7 @@ func NewRowingService() *gatt.Service {
 		log.Println("[[Rowing]] End of workout summary Data char Read Request")
 	})
 
+	endOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing end of workout additional summary data characteristic
 	*/
@@ -131,6 +145,8 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 		log.Println("[[Rowing]] Additional End of workout summary Data char Read Request")
 	})
+
+	additionalEndOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing heart rate belt information characteristic
@@ -149,6 +165,8 @@ func NewRowingService() *gatt.Service {
 		return gatt.StatusSuccess
 	})
 
+	heartRateBeltInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
+
 	/*
 		C2 force curve data characteristic
 	*/
@@ -166,6 +184,8 @@ func NewRowingService() *gatt.Service {
 
 	/*
 		C2 multiplexed information 	characteristic
+
+		0x0080 | Up to 20 bytes | READ Permission
 	*/
 	multiplexedInfoChar := s.AddCharacteristic(attrMultiplexedInfoCharacteristicsUUID)
 	multiplexedInfoChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
@@ -173,6 +193,16 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 		log.Println("[[Rowing]] Multiplexed Info Char")
 	})
+
+	multiplexedInfoChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		log.Println("[[Rowing]] Multiplex Info Char Notify Func")
+		//generate a workout detail payload here
+		data := make([]byte, 20)
+		data=append(data,[]byte{0x31,0x01,0x80,0x01,0x01,0x80,0x01,0x01,0x80,0x01}...)
+		n.Write(data)
+	})
+
+	multiplexedInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	return s
 }

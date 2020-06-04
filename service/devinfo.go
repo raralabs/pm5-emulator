@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"pm5-emulator/config"
 
 	"github.com/bettercap/gatt"
 )
@@ -23,62 +24,62 @@ func NewDevInfoService() *gatt.Service {
 
 	/*
 		C2 PM Device Info: Model Number characteristic
+		0x0011
 	*/
 	modelNumChar := s.AddCharacteristic(attrModelNumberUUID)
 	modelNumChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Module Number String Read")
-		data := make([]byte, 16) //16 bytes
-		rsp.Write(data)
+		rsp.Write([]byte(config.MODEL_NO)) //upto 16 bytes
 	})
 
 	/*
 		C2 PM Device Info: Serial Number characteristic
+		0x0012
 	*/
 	serialNumberChar := s.AddCharacteristic(attrSerialNumberUUID)
 	serialNumberChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Serial Number String Read")
-		data := make([]byte, 9) //9 bytes
-		rsp.Write(data)
+		rsp.Write([]byte(config.SERIAL_NO))  //write serial number as response
 	})
 
 	/*
 		C2 PM Device Info: Hardware Revision characteristic
+		0x0013
 	*/
 	hwRevChar := s.AddCharacteristic(attrHardwareRevisionUUID)
 	hwRevChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Hardware Revision String Read")
-		data := make([]byte, 3) //3 bytes
-		rsp.Write(data)
+		rsp.Write([]byte(config.HARDWARE_VERSION))  //upto 3 bytes
 	})
 
 	/*
 		C2 PM Device Info: Firmware Revision characteristic
+		0x0014
 	*/
 	fwRevChar := s.AddCharacteristic(attrFirmwareRevisionUUID)
 	fwRevChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Firmware Revision String Read")
-		data := make([]byte, 20) //20 bytes
-		rsp.Write(data)
+		rsp.Write([]byte(config.FIRMWARE_VERSION))  //upto 20bytes
 	})
 
 	/*
 		C2 PM Device Info: Manufacturer Name characteristic
+		0x0015
 	*/
 	manuNameChar := s.AddCharacteristic(attrManufacturerNameUUID)
 	manuNameChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Manufacturer Name String Read")
-		data := make([]byte, 16) //16 bytes
-		rsp.Write(data)
+		rsp.Write([]byte(config.MANUFACTURER_NAME)) //upto 16 bytes
 	})
 
 	/*
 		C2 PM Device Info: Erg Machine Type characteristic
+		0x0016
 	*/
 	ergMachineTypeChar := s.AddCharacteristic(attrErgMachineTypeUUID)
 	ergMachineTypeChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Erg Machine Type Read")
-		data := make([]byte, 1) //1 byte
-		rsp.Write(data)
+		rsp.Write([]byte(config.ERG_MACHINE_TYPE)) //upto 1 byte
 	})
 
 	return s
