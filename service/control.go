@@ -62,7 +62,7 @@ func NewControlService() *gatt.Service {
 		//	Data: []byte{0x1}, //sending connection set = true
 		//}
 		//buf:=enc.Encode(pkt)
-		n.Write([]byte{0x76,0x77,0x7E,0x7F})
+		n.Write([]byte{0x76, 0x77, 0x7E, 0x7F})
 		//n.Write([]byte{0x1})
 	})
 
