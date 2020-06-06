@@ -42,7 +42,7 @@ func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 
 	p := &Packet{
 		Data: make([]byte, dataLen),
-		Cmd:  cmd,
+		Cmds: []byte{cmd},
 	}
 
 	// Extract data

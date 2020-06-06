@@ -4,7 +4,7 @@ type Command []byte
 
 type Packet struct {
 	Data []byte
-	Cmd  byte
+	Cmds []byte
 }
 
 //CSAFE

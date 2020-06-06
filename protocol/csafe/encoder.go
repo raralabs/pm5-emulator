@@ -68,13 +68,11 @@ func (cp *Encoder) Encode(p Packet) []byte {
 		panic("Can only send max 255 data at a time")
 	}
 
-	buffer = append(buffer, p.Cmd)             // command
+	buffer = append(buffer, p.Cmds...)         // command
 	buffer = append(buffer, byte(len(buffer))) // Data Byte Count
 
 	if len(p.Data) > 0 {
-		for i := 0; i < len(p.Data); i++ {
-			buffer = append(buffer, p.Data[i]) // data bytes
-		}
+		buffer = append(buffer, p.Data...) // data bytes
 	}
 
 	buffer = append(buffer, calculateChecksum(buffer)) // Insert checksum
