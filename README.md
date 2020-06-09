@@ -25,6 +25,11 @@ sudo go run cmd/pm5-emulator/main.go
 This error is due to blocked bluetooth service. Try ```rfkill unblock bluetooth```
 
 
+**PM5 State Diagram**
+
+![SM](docs/resources/StateDiagram.png)
+
+
 
 **Refs**
 
