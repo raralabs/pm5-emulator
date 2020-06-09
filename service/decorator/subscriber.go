@@ -18,7 +18,7 @@ func NewServiceSubscriber(service *gatt.Service) *ServiceSubscriber {
 
 /** Functionalities Added **/
 
-func (s *ServiceSubscriber) AddCharacteristic(uuid gatt.UUID) ICharacteristicDecorator {
+func (s *ServiceSubscriber) AddCharacteristic(uuid gatt.UUID) ICharDecorator {
 	c := s.service.AddCharacteristic(uuid)
 	return NewCharSubscriber(c)
 }

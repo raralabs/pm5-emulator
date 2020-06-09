@@ -7,7 +7,7 @@ type IServiceDecorator interface {
 	// AddCharacteristic adds a characteristic to a service.
 	// AddCharacteristic panics if the service already contains another
 	// characteristic with the same UUID.
-	AddCharacteristic(u gatt.UUID) *gatt.Characteristic
+	AddCharacteristic(u gatt.UUID) ICharDecorator
 
 	// UUID returns the UUID of the service.
 	UUID() gatt.UUID
@@ -36,8 +36,8 @@ type IServiceDecorator interface {
 }
 
 
-// IServiceDecorator wraps a gatt characteristics.
-type ICharacteristicDecorator interface {
+// ICharDecorator wraps a gatt characteristics.
+type ICharDecorator interface {
 
 	// UUID returns the UUID of the characteristic.
 	UUID() gatt.UUID
