@@ -76,5 +76,5 @@ func NewControlService() *gatt.Service {
 
 	transmitChar.AddDescriptor(attrTransmitDescriptorUUID).SetValue([]byte{})
 
-	return s
+	return controlService
 }

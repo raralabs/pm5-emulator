@@ -104,6 +104,7 @@ func (c *CharSubscriber) HandleWriteFunc(f func(r gatt.Request, data []byte) (st
 func (c *CharSubscriber) HandleNotifyFunc(f func(r gatt.Request, n gatt.Notifier)) {
 	fnc := func(r gatt.Request, n gatt.Notifier) {
 		// Subscribe to the characteristics
+		c.stm.Reset()
 		c.stm.Update(config.CSAFE_GOIDLE_CMD)
 
 		// Run the provided function if the characteristic's state machine is in INUSE state
