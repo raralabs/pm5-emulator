@@ -125,4 +125,7 @@ type ICharDecorator interface {
 	HandleNotifyFunc(f func(r gatt.Request, n gatt.Notifier))
 
 	GetNotifyHandler() gatt.NotifyHandler
+
+	// StopNotify stops the notification channel if it's running
+	StopNotify()
 }

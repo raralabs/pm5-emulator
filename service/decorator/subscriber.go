@@ -2,19 +2,20 @@ package decorator
 
 import (
 	"github.com/bettercap/gatt"
+	"pm5-emulator/config"
+	"pm5-emulator/sm"
 )
 
 /*
  * Service Subscriber
  */
 type ServiceSubscriber struct {
-	service *gatt.Service	// service that this decorator wraps
+	service *gatt.Service // service that this decorator wraps
 }
 
 func NewServiceSubscriber(service *gatt.Service) *ServiceSubscriber {
 	return &ServiceSubscriber{service: service}
 }
-
 
 /** Functionalities Added **/
 
@@ -22,7 +23,6 @@ func (s *ServiceSubscriber) AddCharacteristic(uuid gatt.UUID) ICharDecorator {
 	c := s.service.AddCharacteristic(uuid)
 	return NewCharSubscriber(c)
 }
-
 
 /** Functionalities Not Added **/
 
@@ -58,17 +58,26 @@ func (s *ServiceSubscriber) Characteristics() []*gatt.Characteristic {
 	return s.service.Characteristics()
 }
 
-
 /*
  * Characteristics Subscriber
  */
 
 type CharSubscriber struct {
-	ch *gatt.Characteristic
+	ch     *gatt.Characteristic
+	stm    *sm.StateMachine
+	notify chan bool
 }
 
 func NewCharSubscriber(ch *gatt.Characteristic) *CharSubscriber {
-	return &CharSubscriber{ch: ch}
+
+	stm := sm.NewStateMachine()
+	// Start the state machine from READY state
+	stm.Reset()
+
+	return &CharSubscriber{
+		ch:  ch,
+		stm: stm,
+	}
 }
 
 /** Functionalities Added **/
@@ -84,11 +93,38 @@ func (c *CharSubscriber) HandleReadFunc(f func(rsp gatt.ResponseWriter, req *gat
 }
 
 func (c *CharSubscriber) HandleWriteFunc(f func(r gatt.Request, data []byte) (status byte)) {
-	c.ch.HandleWriteFunc(f)
+	fnc := func(r gatt.Request, data []byte) (status byte) {
+		s := f(r, data)
+		c.stm.Update(config.CSAFE_GOINUSE_CMD)
+		return s
+	}
+	c.ch.HandleWriteFunc(fnc)
 }
 
 func (c *CharSubscriber) HandleNotifyFunc(f func(r gatt.Request, n gatt.Notifier)) {
-	c.ch.HandleNotifyFunc(f)
+	fnc := func(r gatt.Request, n gatt.Notifier) {
+		// Subscribe to the characteristics
+		c.stm.Update(config.CSAFE_GOIDLE_CMD)
+
+		// Run the provided function if the characteristic's state machine is in INUSE state
+		for {
+			select {
+			case <-c.notify:
+				break
+			default:
+				if currState := c.stm.GetState(); currState == c.stm.INUSE {
+					f(r, n)
+					c.stm.Update(config.CSAFE_GOFINISHED_CMD)
+					c.stm.Update(config.CSAFE_GOIDLE_CMD)
+				}
+			}
+		}
+	}
+	c.ch.HandleNotifyFunc(fnc)
+}
+
+func (c *CharSubscriber) StopNotify() {
+	c.notify <- true
 }
 
 /** Functionalities Not Added **/
@@ -180,4 +216,3 @@ func (c *CharSubscriber) HandleNotify(h gatt.NotifyHandler) {
 func (c *CharSubscriber) GetNotifyHandler() gatt.NotifyHandler {
 	return c.ch.GetNotifyHandler()
 }
-
