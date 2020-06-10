@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"pm5-emulator/protocol/csafe"
+	"pm5-emulator/service/decorator"
 
 	"github.com/bettercap/gatt"
 )
@@ -20,7 +21,8 @@ var (
 )
 
 func NewControlService() *gatt.Service {
-	s := gatt.NewService(attrControlServiceUUID)
+	controlService := gatt.NewService(attrControlServiceUUID)
+	s := decorator.NewServiceSubscriber(controlService)
 
 	/*
 		C2 PM receive characteristic
