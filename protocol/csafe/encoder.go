@@ -5,6 +5,13 @@ import "encoding/binary"
 type Encoder struct {
 }
 
+type ResponsePacket struct{
+	Status byte
+	CommandResponseData []byte
+	Identifier byte
+	Data []byte
+}
+
 // Performs the byte stuffing operation if a payload contains byte greater than or equal to 0xF3
 func (cp *Encoder) byteStuffing(payload []byte) []byte {
 	var buffer []byte
@@ -61,15 +68,18 @@ func (cp *Encoder) getType(tpe string) byte {
 }
 
 // Creates a payload for the provided command and the data, and returns it
-func (cp *Encoder) Encode(p Packet) []byte {
+func (cp *Encoder) Encode(p ResponsePacket) []byte {
 	var buffer []byte // The Payload
 
 	if len(p.Data) > 255 {
 		panic("Can only send max 255 data at a time")
 	}
 
-	buffer = append(buffer, p.Cmds...)         // command
-	buffer = append(buffer, byte(len(buffer))) // Data Byte Count
+	buffer=append(buffer,p.Status)
+	buffer=append(buffer,p.CommandResponseData...)
+	buffer=append(buffer,p.Identifier)
+	buffer = append(buffer, byte(len(p.Data))) // Data Byte Count
+	buffer=append(buffer,p.Data...)
 
 	if len(p.Data) > 0 {
 		buffer = append(buffer, p.Data...) // data bytes
