@@ -5,20 +5,13 @@ import "encoding/binary"
 type Encoder struct {
 }
 
-type ResponsePacket struct{
-	Status byte
-	CommandResponseData []byte
-	Identifier byte
-	Data []byte
-}
-
 // Performs the byte stuffing operation if a payload contains byte greater than or equal to 0xF3
 func (cp *Encoder) byteStuffing(payload []byte) []byte {
 	var buffer []byte
 	for i := 0; i < len(payload); i++ {
 		curByte := payload[i]
 		if (curByte & 0b11111100) == 0b11110000 {
-			buffer = append(buffer, 0xF3, (curByte & 0b00000011))
+			buffer = append(buffer, 0xF3, curByte&0b00000011)
 		} else {
 			buffer = append(buffer, curByte)
 		}
@@ -68,21 +61,21 @@ func (cp *Encoder) getType(tpe string) byte {
 }
 
 // Creates a payload for the provided command and the data, and returns it
-func (cp *Encoder) Encode(p ResponsePacket) []byte {
+func (cp *Encoder) Encode(p Packet) []byte {
 	var buffer []byte // The Payload
 
-	if len(p.Data) > 255 {
-		panic("Can only send max 255 data at a time")
+	if len(p.Data) > 90 {
+		panic("Can only send max 90 data at a time")
 	}
 
-	buffer=append(buffer,p.Status)
-	buffer=append(buffer,p.CommandResponseData...)
-	buffer=append(buffer,p.Identifier)
-	buffer = append(buffer, byte(len(p.Data))) // Data Byte Count
-	buffer=append(buffer,p.Data...)
+	buffer = append(buffer, p.Cmds...) // Commands
 
-	if len(p.Data) > 0 {
-		buffer = append(buffer, p.Data...) // data bytes
+	if !p.JustCmd {
+		buffer = append(buffer, byte(len(p.Data))) // Data Byte Count
+
+		if len(p.Data) > 0 {
+			buffer = append(buffer, p.Data...) // data bytes
+		}
 	}
 
 	buffer = append(buffer, calculateChecksum(buffer)) // Insert checksum
@@ -92,4 +85,18 @@ func (cp *Encoder) Encode(p ResponsePacket) []byte {
 	buffer = append(buffer, FRAME_END_BYTE)              // Stop Frame Flag
 
 	return buffer
+}
+
+// EncodeResponse encodes a response packet
+func (cp *Encoder) EncodeResponse(rp ResponsePacket) []byte {
+	cmds := append([]byte{rp.Status}, rp.CommandResponseData...)
+	cmds = append(cmds, rp.Identifier)
+
+	pck := Packet{
+		Data:    rp.Data,
+		Cmds:    cmds,
+		JustCmd: rp.JustCmd,
+	}
+
+	return cp.Encode(pck)
 }

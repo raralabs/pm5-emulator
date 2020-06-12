@@ -9,8 +9,8 @@ type Decoder struct {
 
 func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 
-	if len(raw) < 5 {
-		return nil, errors.New("Raw data length less than minimum length")
+	if len(raw) < 4 {
+		return nil, errors.New("raw data length less than minimum length")
 	}
 
 	// Remove frame start and end bytes
@@ -19,30 +19,40 @@ func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 		return nil, err
 	}
 
-	// Perfom reverse byte-stuffing
+	// Perform reverse byte-stuffing
 	pck, err := d.unstuff(body)
 	if err != nil {
 		return nil, err
-	}
-
-	if len(pck) < 3 {
-		return nil, errors.New("Useful data info length less than minimum length")
 	}
 
 	// Check the checksum
 	dta := pck[0 : len(pck)-1]
 	checksum := calculateChecksum(dta)
 	if checksum != pck[len(pck)-1] {
-		return nil, errors.New("Checksum Mismatched")
+		return nil, errors.New("checksum mismatched")
 	}
 
-	// Extract command and the data length
+	// Extract Command
 	cmd := pck[0]
+
+	if len(pck) == 2 {
+		// Command only
+		p := &Packet{
+			Data:    nil,
+			Cmds:    []byte{cmd},
+			JustCmd: true,
+		}
+
+		return p, nil
+	}
+
+	// Extract the data length
 	dataLen := pck[1]
 
 	p := &Packet{
-		Data: make([]byte, dataLen),
-		Cmds: []byte{cmd},
+		Data:    make([]byte, dataLen),
+		Cmds:    []byte{cmd},
+		JustCmd: false,
 	}
 
 	// Extract data
@@ -55,7 +65,7 @@ func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 
 func (d *Decoder) stripHeadTail(raw []byte) ([]byte, error) {
 	if raw[0] != FRAME_START_BYTE || raw[len(raw)-1] != FRAME_END_BYTE {
-		return raw, errors.New("Not a Packet")
+		return raw, errors.New("not a packet")
 	}
 
 	return raw[1 : len(raw)-1], nil
@@ -68,7 +78,7 @@ func (d *Decoder) unstuff(raw []byte) ([]byte, error) {
 		curByte := raw[i]
 		if curByte == FRAME_STUFF_BYTE {
 			if i == len(raw)-1 {
-				return raw, errors.New("Unspecified Format")
+				return raw, errors.New("unspecified Format")
 			}
 			buffer = append(buffer, 0xF0|raw[i+1])
 			i++
