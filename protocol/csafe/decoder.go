@@ -77,7 +77,7 @@ func (d *Decoder) unstuff(raw []byte) ([]byte, error) {
 	for i := 0; i < len(raw); i++ {
 		curByte := raw[i]
 		if curByte == FRAME_STUFF_BYTE {
-			if i == len(raw)-1 {
+			if (i == len(raw)-1) || (0b11111100&raw[i+1]) != 0 {
 				return raw, errors.New("unspecified Format")
 			}
 			buffer = append(buffer, 0xF0|raw[i+1])

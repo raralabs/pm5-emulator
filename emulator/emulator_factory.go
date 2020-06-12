@@ -1,24 +1,24 @@
 package emulator
 
 import (
-	"github.com/bettercap/gatt"
-	"github.com/bettercap/gatt/linux/cmd"
 	"log"
 	"pm5-emulator/sm"
+
+	"github.com/bettercap/gatt"
+	"github.com/bettercap/gatt/linux/cmd"
 )
 
 //NewEmulator factory methods initializes emulator
-func NewEmulator() *Emulator{
+func NewEmulator() *Emulator {
 	d, err := gatt.NewDevice(defaultServerOptions...)
 	if err != nil {
 		log.Fatalf("Failed to open config, err: %s", err)
 	}
 	return &Emulator{
-		device:d,
-		stateMachine:sm.NewStateMachine(),
+		device:       d,
+		stateMachine: sm.NewStateMachine(),
 	}
 }
-
 
 //BLE Server Options
 var defaultServerOptions = []gatt.Option{
