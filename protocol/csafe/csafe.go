@@ -3,8 +3,17 @@ package csafe
 type Command []byte
 
 type Packet struct {
-	Data []byte
-	Cmds []byte
+	Data    []byte
+	Cmds    []byte
+	JustCmd bool
+}
+
+type ResponsePacket struct {
+	Status              byte
+	CommandResponseData []byte
+	Identifier          byte
+	Data                []byte
+	JustCmd             bool
 }
 
 //CSAFE
