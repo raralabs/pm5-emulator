@@ -4,11 +4,19 @@ language: "go"
 
 sudo: true
 
-go:
-  - 1.13.x
+jobs:
+  include:
+    - language: go
 
-script:
-  - export GO111MODULE=on
-  - ./.travis.gofmt.sh
-  - go test -v -race $(go list ./... | grep -v vendor)
-  - GOOS=linux GOARCH=amd64 go build -o pm5-emulator cmd/pm5-emulator/main.go
+      go: "1.13.x"
+      env:
+        global:
+          GO111MODULE=on
+
+      before_install:
+        - go get github.com/mattn/goveralls
+
+      script:
+        - ./.travis.gofmt.sh
+        - go test -v -race $(go list ./... | grep -v vendor)
+        - GOOS=linux GOARCH=amd64 go build -o pm5-emulator cmd/pm5-emulator/main.go
