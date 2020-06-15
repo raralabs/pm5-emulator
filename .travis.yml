@@ -16,6 +16,5 @@ jobs:
         - go get github.com/mattn/goveralls
 
       script:
-        - bash ./.travis.gofmt.sh
         - go test -v -race $(go list ./... | grep -v vendor)
         - GOOS=linux GOARCH=amd64 go build -o pm5-emulator cmd/pm5-emulator/main.go
