@@ -1,6 +1,6 @@
 ## PM5 Emulator
 
-[![Build Status](https://travis-ci.com/raralabs/pm5-emulator.svg)](https://travis-ci.com/github/raralabs/pm5-emulator)
+[![Build Status](https://api.travis-ci.com/raralabs/pm5-emulator.svg?token=DW7fs8Y8ozBN3DSsN2Uo&branch=master)](https://travis-ci.com/github/raralabs/pm5-emulator)
 
 Emulating PM5 Rower via GATT server in BLE Device 
 
