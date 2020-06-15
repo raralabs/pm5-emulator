@@ -21,7 +21,6 @@ any third-party applications can use the emulator to test, debug and stuffs.
 | Device Info   | 0x0010    |
 | Control       | 0x0020    |
 | Rowing        | 0x0030    |
-| Device Info   | 0x0010    |
 
 ## Instructions to Run
 
