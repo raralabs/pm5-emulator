@@ -1,12 +1,10 @@
 package protocol
 
-import "pm5-emulator/protocol/csafe"
-
 //Protocol
 type Protocol interface {
-	ReadPayload(cmd csafe.Command) error //for reading
+	ReadPayload(payload []byte) error //for reading
 
-	WritePayload(cmd csafe.Command) (csafe.Command, error) //for creating a payload
+	WritePayload(payload []byte) ([]byte, error) //for creating a payload
 
 	//ByteStuffing(cmd csafe.Command) (csafe.Command,error)
 

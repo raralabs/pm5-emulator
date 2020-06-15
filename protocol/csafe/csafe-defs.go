@@ -1,6 +1,8 @@
 package csafe
 
-//Define CSAFE commands and their byte representations here
+// Define CSAFE commands and their byte representations here
+
+// Framing Constants
 const (
 	EXT_FRAME_START_BYTE = 0xF0 + iota
 	FRAME_START_BYTE

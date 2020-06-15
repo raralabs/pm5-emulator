@@ -2,6 +2,7 @@ package csafe
 
 import "encoding/binary"
 
+// Encoder can encode a payload according to the csafe format.
 type Encoder struct {
 }
 
@@ -52,6 +53,7 @@ func (cp *Encoder) getBytesArray(val uint64, numBytes int) []byte {
 	return ret
 }
 
+// getType returns the type (0x00 for "T" and 0x80 for others)
 func (cp *Encoder) getType(tpe string) byte {
 	tp := byte(0x80)
 	if tpe == "T" {

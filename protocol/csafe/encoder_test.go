@@ -22,7 +22,6 @@ func TestEncoder_getBytesArray(t *testing.T) {
 		args args
 		want []byte
 	}{
-		// TODO: Add test cases.
 		{"Test1", args{val: 2, numBytes: 1}, []byte{0x02}},
 		{"Test1", args{val: 2, numBytes: 2}, []byte{0x00, 0x02}},
 		{"Test1", args{val: 256, numBytes: 9}, []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00}},
@@ -46,13 +45,14 @@ func TestEncoder_Encode(t *testing.T) {
 		args args
 		want []byte
 	}{
-		// TODO: Add test cases.
+		// Just Commands encoding test
 		{"Test1: Just Commands", args{Packet{
 			Cmds:    []byte{0x01},
 			Data:    []byte{},
 			JustCmd: true,
 		}}, []byte{0xF1, 0x01, 0x01, 0xF2}},
 
+		// Data and Commands encoding test
 		{"Test2: Data and Commands", args{Packet{
 			Cmds:    []byte{0x02, 0x03, 0x04, 0x01},
 			Data:    []byte{0x11, 0x22},
@@ -60,6 +60,7 @@ func TestEncoder_Encode(t *testing.T) {
 		}}, []byte{0xF1, 0x02, 0x03, 0x04, 0x01, 0x02, 0x11, 0x22,
 			calculateChecksum([]byte{0x02, 0x03, 0x04, 0x01, 0x02, 0x11, 0x22}), 0xF2}},
 
+		// Encoding that involves byte stuffing test
 		{"Test3: ByteStuffing", args{Packet{
 			Cmds:    []byte{0xF1},
 			Data:    []byte{},
@@ -98,7 +99,7 @@ func TestEncoder_EncodeResponse(t *testing.T) {
 		args args
 		want []byte
 	}{
-		// TODO: Add test cases.
+		// Response Packet encoding test
 		{"Test1", args{ResponsePacket{
 			Status:              0x02,
 			CommandResponseData: []byte{0x03, 0x04},

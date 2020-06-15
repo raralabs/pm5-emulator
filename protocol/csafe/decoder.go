@@ -4,9 +4,11 @@ import (
 	"errors"
 )
 
+// Decoder can decode the raw data - considering it as a csafe-encoded packet.
 type Decoder struct {
 }
 
+// Decode decodes the raw csafe-encoded data.
 func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 
 	if len(raw) < 4 {
@@ -63,6 +65,7 @@ func (d *Decoder) Decode(raw []byte) (*Packet, error) {
 	return p, nil
 }
 
+// stripHeadTail removes the framing head and tail bytes.
 func (d *Decoder) stripHeadTail(raw []byte) ([]byte, error) {
 	if raw[0] != FRAME_START_BYTE || raw[len(raw)-1] != FRAME_END_BYTE {
 		return raw, errors.New("not a packet")
@@ -71,6 +74,7 @@ func (d *Decoder) stripHeadTail(raw []byte) ([]byte, error) {
 	return raw[1 : len(raw)-1], nil
 }
 
+// unstuff performs the reverse operation of csafe byte-stuffing.
 func (d *Decoder) unstuff(raw []byte) ([]byte, error) {
 	var buffer []byte
 

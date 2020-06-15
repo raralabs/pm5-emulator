@@ -1,6 +1,30 @@
 package csafe
 
-import "testing"
+import (
+	"testing"
+)
+
+func Test_calculateChecksum(t *testing.T) {
+	type args struct {
+		buffer []byte
+	}
+	tests := []struct {
+		name string
+		args args
+		want byte
+	}{
+		{"Test1", args{[]byte{0x01}}, 0x01},
+		{"Test1", args{[]byte{0x01, 0x02}}, 0x03},
+		{"Test1", args{[]byte{0x01, 0x02, 0x03}}, 0x00},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := calculateChecksum(tt.args.buffer); got != tt.want {
+				t.Errorf("calculateChecksum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
 func Test_padStart(t *testing.T) {
 	type args struct {

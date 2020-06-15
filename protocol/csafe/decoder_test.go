@@ -12,7 +12,7 @@ func TestDecoder_Decode(t *testing.T) {
 		want    *Packet
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		// Just Commands tests
 		{"Test1", []byte{0xF1, 0x00, 0x00, 0xF2}, &Packet{Data: nil, Cmds: []byte{0x00}, JustCmd: true}, false},
 		{"Test2", []byte{0xF1, 0x01, 0x01, 0xF2}, &Packet{Data: nil, Cmds: []byte{0x01}, JustCmd: true}, false},
 

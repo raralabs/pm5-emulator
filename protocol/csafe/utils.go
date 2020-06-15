@@ -11,6 +11,7 @@ func calculateChecksum(buffer []byte) byte {
 	return checksum
 }
 
+// padStart adds the 'pad' string infront of 'str'
 func padStart(str, pad string, maxlength int) (string, error) {
 	strlen := len(str)
 	padlen := len(pad)
