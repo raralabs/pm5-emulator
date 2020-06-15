@@ -1,3 +1,4 @@
+
 ## PM5 Emulator
 
 [![Build Status](https://api.travis-ci.com/raralabs/pm5-emulator.svg?token=DW7fs8Y8ozBN3DSsN2Uo&branch=master)](https://travis-ci.com/github/raralabs/pm5-emulator)
@@ -33,9 +34,12 @@ This error is due to blocked bluetooth service. Try ```rfkill unblock bluetooth`
 
 ![SM](docs/resources/StateDiagram.png)
 
+**CONTRIBUTING**
+
+All kind of contributions are welcome. See [here](CONTRIBUTING.md) for more details!
 
 
-**Refs**
+**REFERENCES**
 
 [PM5-Specs](https://www.concept2.co.uk/files/pdf/us/monitors/PM5_BluetoothSmartInterfaceDefinition.pdf)
 
