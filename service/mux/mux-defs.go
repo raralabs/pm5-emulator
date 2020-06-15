@@ -109,5 +109,3 @@ var mux0x35 = map[string]int{
 	"Stroke_Count_Lo":         17,
 	"Stroke_Count_Hi":         18,
 }
-
-
