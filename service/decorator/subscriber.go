@@ -1,9 +1,10 @@
 package decorator
 
 import (
-	"github.com/bettercap/gatt"
 	"pm5-emulator/config"
 	"pm5-emulator/sm"
+
+	"github.com/bettercap/gatt"
 )
 
 /*

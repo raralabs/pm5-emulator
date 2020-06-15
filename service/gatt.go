@@ -16,7 +16,7 @@ var (
 // NewGattService registers a new GATT service as per PM5 specs
 func NewGattService() *gatt.Service {
 	s := gatt.NewService(attrGATTUUID)
-	c:=s.AddCharacteristic(attrServiceChangedUUID)
+	c := s.AddCharacteristic(attrServiceChangedUUID)
 	c.HandleNotifyFunc(
 		func(r gatt.Request, n gatt.Notifier) {
 			go func() {
@@ -24,12 +24,11 @@ func NewGattService() *gatt.Service {
 			}()
 		})
 
-	c.AddDescriptor(attrGATTClientConfigChar).HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest){
+	c.AddDescriptor(attrGATTClientConfigChar).HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[GATT]] Handle Read")
-		d:=make([]byte,2)
+		d := make([]byte, 2)
 		rsp.Write(d)
 	})
-
 
 	//c := s.AddCharacteristic(attrGATTClientConfigChar)
 	//lv := byte(100)

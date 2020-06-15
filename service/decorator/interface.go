@@ -35,7 +35,6 @@ type IServiceDecorator interface {
 	Characteristics() []*gatt.Characteristic
 }
 
-
 // ICharDecorator wraps a gatt characteristics.
 type ICharDecorator interface {
 

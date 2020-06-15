@@ -39,7 +39,7 @@ func NewDevInfoService() *gatt.Service {
 	serialNumberChar := s.AddCharacteristic(attrSerialNumberUUID)
 	serialNumberChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Serial Number String Read")
-		rsp.Write([]byte(config.SERIAL_NO))  //write serial number as response
+		rsp.Write([]byte(config.SERIAL_NO)) //write serial number as response
 	})
 
 	/*
@@ -49,7 +49,7 @@ func NewDevInfoService() *gatt.Service {
 	hwRevChar := s.AddCharacteristic(attrHardwareRevisionUUID)
 	hwRevChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Hardware Revision String Read")
-		rsp.Write([]byte(config.HARDWARE_VERSION))  //upto 3 bytes
+		rsp.Write([]byte(config.HARDWARE_VERSION)) //upto 3 bytes
 	})
 
 	/*
@@ -59,7 +59,7 @@ func NewDevInfoService() *gatt.Service {
 	fwRevChar := s.AddCharacteristic(attrFirmwareRevisionUUID)
 	fwRevChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		log.Println("[[DevInfo]] Firmware Revision String Read")
-		rsp.Write([]byte(config.FIRMWARE_VERSION))  //upto 20bytes
+		rsp.Write([]byte(config.FIRMWARE_VERSION)) //upto 20bytes
 	})
 
 	/*
