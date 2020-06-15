@@ -2,9 +2,13 @@
 -------------
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
-Please follow [Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/) in all your interactions with the project.
+Please follow [Code of Conduct](https://github.com/raralabs/pm5-emulator/blob/master/code_of_conduct.md) in all your interactions with the project.
+
+We use [go-report](https://goreportcard.com/) to evaluate our code. So please check your code score before creating pull request.
+
 
 **Contributor Workflow**
+
 To contribute, the workflow is as follows:
 - Fork repository
 - Create topic branch
@@ -27,4 +31,5 @@ git rebase -i HEAD~n
 # n is the number of commits in pull request 
 git push #push to github 
 ``` 
+
 
