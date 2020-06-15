@@ -3,6 +3,8 @@
 [![alt text](https://godoc.org/github.com/raralabs/pm5-emulator?status.svg)](https://godoc.org/github.com/raralabs/pm5-emulator)
 [![Go Report Card](https://goreportcard.com/badge/github.com/raralabs/pm5-emulator)](https://goreportcard.com/report/github.com/raralabs/pm5-emulator)
 [![Build Status](https://api.travis-ci.com/raralabs/pm5-emulator.svg?token=DW7fs8Y8ozBN3DSsN2Uo&branch=master)](https://travis-ci.com/github/raralabs/pm5-emulator)
+[![Coverage Status](https://coveralls.io/repos/github/raralabs/pm5-emulator/badge.svg?branch=master)](https://coveralls.io/github/raralabs/pm5-emulator?branch=master)
+
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
 
