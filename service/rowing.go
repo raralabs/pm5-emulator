@@ -29,6 +29,7 @@ var (
 	attrMultiplexedInfoCharacteristicsUUID, _                   = gatt.ParseUUID(getFullUUID("0080"))
 )
 
+//NewRowingService advertises rowing service defined by PM5 device
 func NewRowingService() *gatt.Service {
 	s := gatt.NewService(attrRowingServiceUUID)
 

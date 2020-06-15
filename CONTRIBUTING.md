@@ -24,7 +24,7 @@ To contribute, the workflow is as follows:
 
 **Some tips for commits**
 1. Write quality commit messages.
-2. Do not add to many redundant commits. If so, squash your commits using:
+2. Do not add too many redundant commits. If so, squash your commits using:
 ```cassandraql
 git checkout your-branch
 git rebase -i HEAD~n 

@@ -20,6 +20,7 @@ var (
 	attrTransmitDescriptorUUID, _      = gatt.ParseUUID(getFullUUID("2902"))
 )
 
+//NewControlService advertises Control service offered by PM5
 func NewControlService() *gatt.Service {
 	controlService := gatt.NewService(attrControlServiceUUID)
 	s := decorator.NewServiceSubscriber(controlService)

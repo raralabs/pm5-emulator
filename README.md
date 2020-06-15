@@ -13,10 +13,14 @@ Before starting the app, turn BLE service down:
 ```
 sudo hciconfig hci0 down 
 ```
+Run tests and Build emulator:
+```cassandraql
+make all 
+```
 
 Advertise your custom PM5 service (as emulator):
 ```cassandraql
-sudo go run cmd/pm5-emulator/main.go 
+sudo ./pm5-emulator 
 ```
 
 
