@@ -1,6 +1,5 @@
 ## PM5 Emulator 
-Emulating PM5 Rower via GATT server in BLE Device 
-
+Emulating PM5 Rower via GATT server in BLE Device.  
 
 **Instructions to Run** 
 
@@ -29,9 +28,12 @@ This error is due to blocked bluetooth service. Try ```rfkill unblock bluetooth`
 
 ![SM](docs/resources/StateDiagram.png)
 
+**CONTRIBUTING**
+
+All kind of contributions are welcome. See [here](CONTRIBUTING.md) for more details!
 
 
-**Refs**
+**REFERENCES**
 
 [PM5-Specs](https://www.concept2.co.uk/files/pdf/us/monitors/PM5_BluetoothSmartInterfaceDefinition.pdf)
 
