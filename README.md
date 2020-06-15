@@ -5,6 +5,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/raralabs/pm5-emulator)](https://goreportcard.com/report/github.com/raralabs/pm5-emulator)
 [![Build Status](https://api.travis-ci.com/raralabs/pm5-emulator.svg?token=DW7fs8Y8ozBN3DSsN2Uo&branch=master)](https://travis-ci.com/github/raralabs/pm5-emulator)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
 
 Emulating PM5 Rower via GATT server in BLE Device
 
