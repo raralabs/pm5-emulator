@@ -2,6 +2,8 @@ package csafe
 
 type Command []byte
 
+type CSAFE struct{}
+
 type Packet struct {
 	Data    []byte
 	Cmds    []byte

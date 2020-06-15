@@ -3,3 +3,6 @@
 .vscode
 #project
 vendor/
+
+#binaries
+pm5-emulator
