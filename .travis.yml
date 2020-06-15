@@ -16,5 +16,6 @@ jobs:
         - go get github.com/mattn/goveralls
 
       script:
-        - go test -v -race $(go list ./... | grep -v vendor)
         - GOOS=linux GOARCH=amd64 go build -o pm5-emulator cmd/pm5-emulator/main.go
+        - go test -v -race -covermode atomic -coverprofile="profile.cov" ./...
+        - $HOME/gopath/bin/goveralls -coverprofile="profile.cov" -service=travis-ci
