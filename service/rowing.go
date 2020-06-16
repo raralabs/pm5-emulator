@@ -1,8 +1,8 @@
 package service
 
 import (
-	"log"
-
+	"pm5-emulator/service/mux"
+	"github.com/sirupsen/logrus"
 	"github.com/bettercap/gatt"
 )
 
@@ -39,9 +39,9 @@ func NewRowingService() *gatt.Service {
 	rowingGenStatusChar := s.AddCharacteristic(attrGeneralStatusCharacteristicsUUID)
 	rowingGenStatusChar.HandleReadFunc(
 		func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-			data := make([]byte, 19) //19 bytes
-			rsp.Write(data)
-			log.Println("[[Rowing]] General Status Char Read Request")
+			logrus.Info("General Status Char Read Request")
+			//19 bytes
+			rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x80, 0x0})
 		})
 
 	rowingGenStatusChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -51,9 +51,8 @@ func NewRowingService() *gatt.Service {
 	*/
 	additionalStatus1Char := s.AddCharacteristic(attrAdditionalStatus1CharacteristicsUUID)
 	additionalStatus1Char.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		data := make([]byte, 16)
-		rsp.Write(data)
-		log.Println("[[Rowing]] Additional Status 1 Char Read Request")
+		logrus.Info("Additional Status 1 Char Read Request")
+		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xb8, 0xb, 0x0, 0x0, 0x0})
 	})
 
 	additionalStatus1Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -63,42 +62,39 @@ func NewRowingService() *gatt.Service {
 	*/
 	additionalStatus2Char := s.AddCharacteristic(attrAdditionalStatus2CharacteristicsUUID)
 	additionalStatus2Char.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		data := make([]byte, 16)
-		rsp.Write(data)
-		log.Println("[[Rowing]] Additional Status 2 Status Char Read Request")
+		logrus.Info("Additional Status 2 Status Char Read Request")
+		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
 	})
 
 	additionalStatus2Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
-		C2 rowing general status and additional status sample rate characteristic
+		C2 rowing general status and additional status sample rate characteristic 0x0034
 	*/
 	sampleRateChar := s.AddCharacteristic(attrSampleRateCharacteristicsUUID)
 	sampleRateChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("Sample Rate Char Read Request")
 		data := make([]byte, 1)
 		rsp.Write(data)
-		log.Println("[[Rowing]] Sample Rate Char Read Request")
 	})
 
 	/*
-		C2 rowing stroke data  characteristic
+		C2 rowing stroke data  characteristic 0x0035
 	*/
 	strokeDataChar := s.AddCharacteristic(attrStrokeDataCharacteristicsUUID)
 	strokeDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		data := make([]byte, 20)
-		rsp.Write(data)
-		log.Println("[[Rowing]] Stroke Data char Read Request")
+		logrus.Info("Stroke Data char Read Request")
+		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
 	})
 
 	strokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
-		C2 rowing additional stroke data characteristic
+		C2 rowing additional stroke data characteristic 0x0036
 	*/
 	additionalStrokeDataChar := s.AddCharacteristic(attrAdditionalStrokeDataCharacteristicsUUID)
 	additionalStrokeDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		data := make([]byte, 15)
-		rsp.Write(data)
-		log.Println("[[Rowing]] Additional Stroke Data char Read Request")
+		logrus.Info("Additional Stroke Data char Read Request")
+		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff})
 	})
 
 	additionalStrokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -108,9 +104,9 @@ func NewRowingService() *gatt.Service {
 	*/
 	splitIntervalDataChar := s.AddCharacteristic(attrSplitIntervalDataCharacteristicsUUID)
 	splitIntervalDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("Split/Interval Data char Read Request")
 		data := make([]byte, 18)
 		rsp.Write(data)
-		log.Println("[[Rowing]] Split/Interval Data char Read Request")
 	})
 
 	splitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -120,9 +116,9 @@ func NewRowingService() *gatt.Service {
 	*/
 	additionalSplitIntervalDataChar := s.AddCharacteristic(attrAdditionalSplitIntervalDataCharacteristicsUUID)
 	additionalSplitIntervalDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("Additional Split/Interval Data char Read Request")
 		data := make([]byte, 18)
 		rsp.Write(data)
-		log.Println("[[Rowing]] Additional Split/Interval Data char Read Request")
 	})
 
 	additionalSplitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -131,9 +127,9 @@ func NewRowingService() *gatt.Service {
 	*/
 	endOfWorkoutSummaryDataChar := s.AddCharacteristic(attrEndOfWorkoutSummaryDataCharacteristicsUUID)
 	endOfWorkoutSummaryDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("End of workout summary Data char Read Request")
 		data := make([]byte, 20)
 		rsp.Write(data)
-		log.Println("[[Rowing]] End of workout summary Data char Read Request")
 	})
 
 	endOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -142,9 +138,9 @@ func NewRowingService() *gatt.Service {
 	*/
 	additionalEndOfWorkoutSummaryDataChar := s.AddCharacteristic(attrAdditionalEndOfWorkoutSummaryDataCharacteristicsUUID)
 	additionalEndOfWorkoutSummaryDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("Additional End of workout summary Data char Read Request")
 		data := make([]byte, 19)
 		rsp.Write(data)
-		log.Println("[[Rowing]] Additional End of workout summary Data char Read Request")
 	})
 
 	additionalEndOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
@@ -155,14 +151,14 @@ func NewRowingService() *gatt.Service {
 	heartRateBeltInfoChar := s.AddCharacteristic(attrHeartRateBeltInfoCharacteristicsUUID)
 	//handle read
 	heartRateBeltInfoChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("Heart Rate Belt Info Read Request")
 		data := make([]byte, 6)
 		rsp.Write(data)
-		log.Println("[[Rowing]] Heart Rate Belt Info Read Request")
 	})
 
 	//handle write
 	heartRateBeltInfoChar.HandleWriteFunc(func(req gatt.Request, data []byte) (status byte) {
-		log.Println("[[Rowing]] received data at heart rate belt info: ", string(data))
+		logrus.Info("received data at heart rate belt info: ", string(data))
 		return gatt.StatusSuccess
 	})
 
@@ -173,13 +169,13 @@ func NewRowingService() *gatt.Service {
 	*/
 	forceCurveDataChar := s.AddCharacteristic(attrForceCurveDataCharacteristicsUUID)
 	forceCurveDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("Force Curve Data Read Request")
 		data := make([]byte, 288)
 		rsp.Write(data)
-		log.Println("[[Rowing]] Force Curve Data Read Request")
 	})
 
 	forceCurveDataChar.HandleWriteFunc(func(req gatt.Request, data []byte) (status byte) {
-		log.Println("[[Rowing]] received data at force curve data: ", string(data))
+		logrus.Info("received data at force curve data: ", string(data))
 		return gatt.StatusSuccess
 	})
 
@@ -190,17 +186,16 @@ func NewRowingService() *gatt.Service {
 	*/
 	multiplexedInfoChar := s.AddCharacteristic(attrMultiplexedInfoCharacteristicsUUID)
 	multiplexedInfoChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		data := make([]byte, 20)
-		rsp.Write(data)
-		log.Println("[[Rowing]] Multiplexed Info Char")
+		logrus.Info("Multiplexed Info Char")
+		m:=mux.Multiplexer{}
+		rsp.Write(m.HandleC2RowingGeneralStatus([]byte{}))
 	})
 
 	multiplexedInfoChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
-		log.Println("[[Rowing]] Multiplex Info Char Notify Func")
-		//generate a workout detail payload here
-		data := make([]byte, 20)
-		data = append(data, []byte{0x31, 0x01, 0x80, 0x01, 0x01, 0x80, 0x01, 0x01, 0x80, 0x01}...)
-		n.Write(data)
+		logrus.Info("Multiplex Info Char Notify Func")
+		//generate a rowing general status payload here
+		m:=mux.Multiplexer{}
+		n.Write(m.HandleC2RowingGeneralStatus([]byte{}))
 	})
 
 	multiplexedInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})

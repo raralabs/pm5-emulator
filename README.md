@@ -62,14 +62,16 @@ rfkill unblock bluetooth
 
 ![SM](docs/resources/StateDiagram.png)
 
+## MAINTAINERS
+
+[Anish Bhusal](https://www.github.com/anisbhsl)
+
+[Nischal Nepal](https://www.github.com/n-is)
+
 ## CONTRIBUTING
 
 All kind of contributions are welcome. See [here](CONTRIBUTING.md) for more details!
 
-## REFERENCES
+## CONTACT-US
 
-[PM5-Specs](https://www.concept2.co.uk/files/pdf/us/monitors/PM5_BluetoothSmartInterfaceDefinition.pdf)
-
-[Intro to GATT](https://www.oreilly.com/library/view/getting-started-with/9781491900550/ch04.html)
-
-[BLE Stack](https://www.mathworks.com/help/comm/examples/ble-l2cap-frame-generation-and-decoding.html)
+[RARA LABS](https://raralabs.com/)
