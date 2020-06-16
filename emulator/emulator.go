@@ -2,11 +2,10 @@ package emulator
 
 import (
 	"fmt"
-	"log"
 	"pm5-emulator/config"
 	"pm5-emulator/service"
 	"pm5-emulator/sm"
-
+	"github.com/sirupsen/logrus"
 	"github.com/bettercap/gatt"
 )
 
@@ -59,18 +58,18 @@ func (em *Emulator) registerHandlers() {
 	// Register optional handlers.
 	em.device.Handle(
 		gatt.PeripheralConnected(func(p gatt.Peripheral, err error) {
-			log.Println("|Peripheral Connected|: ")
-			fmt.Println("ID: ", p.ID())
-			fmt.Println("Device: ", p.Device())
-			fmt.Println("Name: ", p.Name())
+			logrus.Info("|Peripheral Connected|: ")
+			logrus.Info("ID: ", p.ID())
+			logrus.Info("Device: ", p.Device())
+			logrus.Info("Name: ", p.Name())
 		}),
 		gatt.CentralConnected(func(c gatt.Central) {
-			log.Println("|Device Connected| ID=> ", c.ID())
-			fmt.Println("MTU: ", c.MTU())
+			logrus.Info("|Device Connected| ID=> ", c.ID())
+			logrus.Info("MTU: ", c.MTU())
 		}),
 		gatt.CentralDisconnected(func(c gatt.Central) {
-			log.Println("|Device Disconnected| ID=> ", c.ID())
-			fmt.Println("MTU: ", c.MTU())
+			logrus.Info("|Device Disconnected| ID=> ", c.ID())
+			logrus.Info("MTU: ", c.MTU())
 		}),
 	)
 }

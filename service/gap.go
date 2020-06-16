@@ -1,8 +1,7 @@
 package service
 
 import (
-	"log"
-
+	"github.com/sirupsen/logrus"
 	"github.com/bettercap/gatt"
 )
 
@@ -27,7 +26,7 @@ func NewGapService(name string) *gatt.Service {
 	*/
 	devNameChar := s.AddCharacteristic(attrDeviceNameUUID)
 	devNameChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[GAP]] Device Name Read")
+		logrus.Info("Device Name Read")
 		data := []byte(name)
 		rsp.Write(data)
 	})
@@ -37,7 +36,7 @@ func NewGapService(name string) *gatt.Service {
 	*/
 	appearanceChar := s.AddCharacteristic(attrAppearanceUUID)
 	appearanceChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[GAP]] Appearance Read")
+		logrus.Info("Appearance Read")
 		data := []byte{0x00, 0x00}
 		rsp.Write(data)
 	})
@@ -47,7 +46,7 @@ func NewGapService(name string) *gatt.Service {
 	*/
 	ppChar := s.AddCharacteristic(attrPeripheralPrivacyUUID)
 	ppChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[GAP]] Peripheral Privacy Read")
+		logrus.Info("Peripheral Privacy Read")
 		data := []byte{0x00}
 		rsp.Write(data)
 	})
@@ -57,7 +56,7 @@ func NewGapService(name string) *gatt.Service {
 	*/
 	reconAddrChar := s.AddCharacteristic(attrReconnectionAddrUUID)
 	reconAddrChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[GAP]] Reconnect Address Read")
+		logrus.Info("Reconnect Address Read")
 		data := []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 		rsp.Write(data)
 	})
@@ -67,7 +66,7 @@ func NewGapService(name string) *gatt.Service {
 	*/
 	prefParamChar := s.AddCharacteristic(attrPeferredParamsUUID)
 	prefParamChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[GAP]] Preferred Connection Read")
+		logrus.Info("Preferred Connection Read")
 		data := []byte{0x00, 0x18, 0x00, 0x18, 0x00, 0x00, 0x03, 0xE8}
 		rsp.Write(data)
 	})

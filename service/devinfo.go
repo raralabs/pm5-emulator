@@ -1,9 +1,8 @@
 package service
 
 import (
-	"log"
 	"pm5-emulator/config"
-
+	"github.com/sirupsen/logrus"
 	"github.com/bettercap/gatt"
 )
 
@@ -28,7 +27,7 @@ func NewDevInfoService() *gatt.Service {
 	*/
 	modelNumChar := s.AddCharacteristic(attrModelNumberUUID)
 	modelNumChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[DevInfo]] Module Number String Read")
+		logrus.Info("Module Number String Read")
 		rsp.Write([]byte(config.MODEL_NO)) //upto 16 bytes
 	})
 
@@ -38,7 +37,7 @@ func NewDevInfoService() *gatt.Service {
 	*/
 	serialNumberChar := s.AddCharacteristic(attrSerialNumberUUID)
 	serialNumberChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[DevInfo]] Serial Number String Read")
+		logrus.Info("Serial Number String Read")
 		rsp.Write([]byte(config.SERIAL_NO)) //write serial number as response
 	})
 
@@ -48,7 +47,7 @@ func NewDevInfoService() *gatt.Service {
 	*/
 	hwRevChar := s.AddCharacteristic(attrHardwareRevisionUUID)
 	hwRevChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[DevInfo]] Hardware Revision String Read")
+		logrus.Info("Hardware Revision String Read")
 		rsp.Write([]byte(config.HARDWARE_VERSION)) //upto 3 bytes
 	})
 
@@ -58,7 +57,7 @@ func NewDevInfoService() *gatt.Service {
 	*/
 	fwRevChar := s.AddCharacteristic(attrFirmwareRevisionUUID)
 	fwRevChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[DevInfo]] Firmware Revision String Read")
+		logrus.Info("Firmware Revision String Read")
 		rsp.Write([]byte(config.FIRMWARE_VERSION)) //upto 20bytes
 	})
 
@@ -68,7 +67,7 @@ func NewDevInfoService() *gatt.Service {
 	*/
 	manuNameChar := s.AddCharacteristic(attrManufacturerNameUUID)
 	manuNameChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[DevInfo]] Manufacturer Name String Read")
+		logrus.Info("Manufacturer Name String Read")
 		rsp.Write([]byte(config.MANUFACTURER_NAME)) //upto 16 bytes
 	})
 
@@ -78,7 +77,7 @@ func NewDevInfoService() *gatt.Service {
 	*/
 	ergMachineTypeChar := s.AddCharacteristic(attrErgMachineTypeUUID)
 	ergMachineTypeChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		log.Println("[[DevInfo]] Erg Machine Type Read")
+		logrus.Info("Erg Machine Type Read")
 		rsp.Write([]byte(config.ERG_MACHINE_TYPE)) //upto 1 byte
 	})
 

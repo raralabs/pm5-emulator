@@ -2,10 +2,9 @@ package service
 
 import (
 	"fmt"
-	"log"
 	"pm5-emulator/protocol/csafe"
 	"pm5-emulator/service/decorator"
-
+	"github.com/sirupsen/logrus"
 	"github.com/bettercap/gatt"
 )
 
@@ -40,14 +39,13 @@ func NewControlService() *gatt.Service {
 		}
 		str = fmt.Sprintf("%s] Error: %v", str, err)
 
-		log.Println(str)
+		logrus.Info(str)
 		return 1
 		//return gatt.StatusSuccess
 	})
 
 	receiveChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
-		str := fmt.Sprintf("[[control]] notify called by device ID: %v", r.Central.ID())
-		log.Println(str)
+		logrus.Info(fmt.Sprintf("[[Control]] notify called by device ID: %v", r.Central.ID()))
 		l := n.Cap()
 		data := make([]byte, l)
 		n.Write(data)
@@ -58,21 +56,14 @@ func NewControlService() *gatt.Service {
 	*/
 	transmitChar := s.AddCharacteristic(attrTransmitCharacteristicsUUID)
 	transmitChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
-		log.Println("[[Control Transmit]] Notify Signal")
-
-		//enc:=csafe.Encoder{}
-		//pkt:=csafe.Packet{
-		//	Data: []byte{0x1}, //sending connection set = true
-		//}
-		//buf:=enc.Encode(pkt)
+		logrus.Info("[[Transmit]] Notify Signal")
 		n.Write([]byte{0x76, 0x77, 0x7E, 0x7F})
-		//n.Write([]byte{0x1})
 	})
 
 	transmitChar.HandleReadFunc(func(resp gatt.ResponseWriter, req *gatt.ReadRequest) {
+		logrus.Info("[[Transmit]] Transmitting Data")
 		data := make([]byte, 20)
 		resp.Write(data)
-		log.Println("[[Control]:0022] Transmitting Data")
 	})
 
 	transmitChar.AddDescriptor(attrTransmitDescriptorUUID).SetValue([]byte{})
