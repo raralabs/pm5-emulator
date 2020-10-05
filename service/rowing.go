@@ -48,6 +48,10 @@ func NewRowingService() *gatt.Service {
 		C2 rowing additional status 2 characteristic
 	*/
 	additionalStatus2Char := s.AddCharacteristic(attrAdditionalStatus2CharacteristicsUUID)
+	additionalStatus2Char.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Status 2 Char Notify Request")
+		n.Write([]byte{0x0, 0x1, 0x2, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+	})
 
 	/*
 		C2 rowing general status and additional status sample rate characteristic 0x0034
