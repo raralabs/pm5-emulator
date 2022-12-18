@@ -41,7 +41,7 @@ func (em *Emulator) RunEmulator() {
 			d.AddService(s3)
 
 			// Advertise config name and service's UUIDs.
-			d.AdvertiseNameAndServices(config.NAME, []gatt.UUID{s1.UUID(), s2.UUID(), s3.UUID()})
+			d.AdvertiseNameAndServices(config.NAME, []gatt.UUID{gatt.MustParseUUID("CE060000-43E5-11E4-916C-0800200C9A66")})
 
 		default:
 		}
