@@ -14,7 +14,6 @@ import (
 var (
 	attrRowingServiceUUID, _                                    = gatt.ParseUUID(getFullUUID("0030"))
 	attrGeneralStatusCharacteristicsUUID, _                     = gatt.ParseUUID(getFullUUID("0031"))
-	attrGeneralStatusDescriptorUUID, _                          = gatt.ParseUUID(getFullUUID("2902"))
 	attrAdditionalStatus1CharacteristicsUUID, _                 = gatt.ParseUUID(getFullUUID("0032"))
 	attrAdditionalStatus2CharacteristicsUUID, _                 = gatt.ParseUUID(getFullUUID("0033"))
 	attrSampleRateCharacteristicsUUID, _                        = gatt.ParseUUID(getFullUUID("0034"))
@@ -44,7 +43,6 @@ func NewRowingService() *gatt.Service {
 			rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x80, 0x0})
 		})
 
-	rowingGenStatusChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional status 1 characteristic
@@ -55,7 +53,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xb8, 0xb, 0x0, 0x0, 0x0})
 	})
 
-	additionalStatus1Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional status 2 characteristic
@@ -66,7 +63,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
 	})
 
-	additionalStatus2Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing general status and additional status sample rate characteristic 0x0034
 	*/
@@ -86,7 +82,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
 	})
 
-	strokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional stroke data characteristic 0x0036
@@ -97,7 +92,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff})
 	})
 
-	additionalStrokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing split/interval data characteristic
@@ -109,7 +103,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 	})
 
-	splitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional split/interval data characteristic
@@ -121,7 +114,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 	})
 
-	additionalSplitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing end of workout summary data characteristic
 	*/
@@ -132,7 +124,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 	})
 
-	endOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing end of workout additional summary data characteristic
 	*/
@@ -143,7 +134,6 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 	})
 
-	additionalEndOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing heart rate belt information characteristic
@@ -161,8 +151,6 @@ func NewRowingService() *gatt.Service {
 		logrus.Info("received data at heart rate belt info: ", string(data))
 		return gatt.StatusSuccess
 	})
-
-	heartRateBeltInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 force curve data characteristic
@@ -198,7 +186,6 @@ func NewRowingService() *gatt.Service {
 		n.Write(m.HandleC2RowingGeneralStatus([]byte{}))
 	})
 
-	multiplexedInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	return s
 }

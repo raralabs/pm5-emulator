@@ -9,7 +9,6 @@ import (
 var (
 	attrGATTUUID, _             = gatt.ParseUUID(getFullUUID("1801"))
 	attrServiceChangedUUID, _   = gatt.ParseUUID(getFullUUID("2A05"))
-	attrGATTClientConfigChar, _ = gatt.ParseUUID(getFullUUID("2902"))
 )
 
 // NewGattService registers a new GATT service as per PM5 specs
@@ -23,7 +22,7 @@ func NewGattService() *gatt.Service {
 			}()
 		})
 
-	c.AddDescriptor(attrGATTClientConfigChar).HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
+	c.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
 		logrus.Info("Handle Read")
 		rsp.Write([]byte{0x0,0x0}) //2 bytes
 	})
