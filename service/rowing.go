@@ -91,45 +91,124 @@ func NewRowingService() *gatt.Service {
 		C2 rowing stroke data  characteristic 0x0035
 	*/
 	strokeDataChar := s.AddCharacteristic(attrStrokeDataCharacteristicsUUID)
-
+	strokeDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Stroke Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Stroke Data Notification from goroutine")
+				n.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+				time.Sleep(1000 * time.Millisecond)
+			}
+		}()	
+	})
 
 	/*
 		C2 rowing additional stroke data characteristic 0x0036
 	*/
 	additionalStrokeDataChar := s.AddCharacteristic(attrAdditionalStrokeDataCharacteristicsUUID)
-
+	additionalStrokeDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Stroke Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Stroke Data Notification from goroutine")
+				n.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff})
+				time.Sleep(1000 * time.Millisecond)
+			}
+		}()	
+	})
 
 	/*
 		C2 rowing split/interval data characteristic
 	*/
 	splitIntervalDataChar := s.AddCharacteristic(attrSplitIntervalDataCharacteristicsUUID)
+	splitIntervalDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Split/Interval Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Split/Interval Data Notification from goroutine")
+				n.Write(make([]byte, 18))
+				time.Sleep(50000 * time.Millisecond)
+			}
+		}()	
+	})
 
 
 	/*
 		C2 rowing additional split/interval data characteristic
 	*/
 	additionalSplitIntervalDataChar := s.AddCharacteristic(attrAdditionalSplitIntervalDataCharacteristicsUUID)
+	additionalSplitIntervalDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Split/Interval Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Additional Split/Interval Data Notification from goroutine")
+				n.Write(make([]byte, 18))
+				time.Sleep(50000 * time.Millisecond)
+			}
+		}()	
+	})
 
 	/*
 		C2 rowing end of workout summary data characteristic
 	*/
 	endOfWorkoutSummaryDataChar := s.AddCharacteristic(attrEndOfWorkoutSummaryDataCharacteristicsUUID)
+	endOfWorkoutSummaryDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("End of workout summary Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				time.Sleep(200000 * time.Millisecond)
+				logrus.Info("End of workout summary Data Notification from goroutine")
+				n.Write(make([]byte, 20))
+			}
+		}()	
+	})
 
 	/*
 		C2 rowing end of workout additional summary data characteristic
 	*/
 	additionalEndOfWorkoutSummaryDataChar := s.AddCharacteristic(attrAdditionalEndOfWorkoutSummaryDataCharacteristicsUUID)
+	additionalEndOfWorkoutSummaryDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("End of workout Additional summary Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				time.Sleep(200000 * time.Millisecond)
+				logrus.Info("End of workout Additional summary Data Notification from goroutine")
+				n.Write(make([]byte, 20))
+			}
+		}()	
+	})
 
 
 	/*
 		C2 rowing heart rate belt information characteristic
 	*/
 	heartRateBeltInfoChar := s.AddCharacteristic(attrHeartRateBeltInfoCharacteristicsUUID)
+	heartRateBeltInfoChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Heart Rate Belt Info Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Heart Rate Belt Data Notification from goroutine")
+				n.Write(make([]byte, 6))
+				time.Sleep(100000 * time.Millisecond)
+
+			}
+		}()	
+	})
 
 	/*
 		C2 force curve data characteristic
 	*/
 	forceCurveDataChar := s.AddCharacteristic(attrForceCurveDataCharacteristicsUUID)
+	forceCurveDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Force Curve Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Force Curve Data Notification from goroutine")
+				n.Write([]byte{0b000101001, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+				time.Sleep(1000 * time.Millisecond)
+			}
+		}()	
+	})
 
 	/*
 		C2 multiplexed information 	characteristic
