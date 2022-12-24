@@ -96,6 +96,14 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 	})
 
+	sampleRateChar.HandleWriteFunc(func(req gatt.Request, data []byte) (status byte) {
+		logrus.Info("Sample Rate Char Write Request: ", string(data))
+		if (len(data) > 1){
+			logrus.Error("Sample Rate Char Write Request received more than one byte")
+		}
+		return gatt.StatusSuccess
+	})
+
 	/*
 		C2 rowing stroke data  characteristic 0x0035
 	*/
