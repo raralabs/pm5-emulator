@@ -4,6 +4,8 @@ import (
 	"pm5-emulator/service/mux"
 	"github.com/sirupsen/logrus"
 	"github.com/bettercap/gatt"
+	"time"
+	"crypto/rand"
 )
 
 /*
@@ -14,7 +16,6 @@ import (
 var (
 	attrRowingServiceUUID, _                                    = gatt.ParseUUID(getFullUUID("0030"))
 	attrGeneralStatusCharacteristicsUUID, _                     = gatt.ParseUUID(getFullUUID("0031"))
-	attrGeneralStatusDescriptorUUID, _                          = gatt.ParseUUID(getFullUUID("2902"))
 	attrAdditionalStatus1CharacteristicsUUID, _                 = gatt.ParseUUID(getFullUUID("0032"))
 	attrAdditionalStatus2CharacteristicsUUID, _                 = gatt.ParseUUID(getFullUUID("0033"))
 	attrSampleRateCharacteristicsUUID, _                        = gatt.ParseUUID(getFullUUID("0034"))
@@ -37,36 +38,54 @@ func NewRowingService() *gatt.Service {
 		C2 rowing general status characteristic
 	*/
 	rowingGenStatusChar := s.AddCharacteristic(attrGeneralStatusCharacteristicsUUID)
-	rowingGenStatusChar.HandleReadFunc(
-		func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-			logrus.Info("General Status Char Read Request")
-			//19 bytes
-			rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x80, 0x0})
-		})
 
-	rowingGenStatusChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
+	rowingGenStatusChar.HandleNotifyFunc(
+		func(r gatt.Request, n gatt.Notifier) {
+			logrus.Info("General Status Char Notify Request - launching goroutine")
+			go func() {
+				for true {
+					logrus.Info("Sending General Status Char Notification from goroutine")
+					byteArray := make([]byte, 1)
+					rand.Read(byteArray)		
+					// 19 bytes		
+					n.Write([]byte{byteArray[0], 0x5, 0x5, 0x5, 0x5, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5, 0x5, 0x5, 0x5})
+					time.Sleep(500 * time.Millisecond)
+				}
+			}()
+		})	
 
 	/*
 		C2 rowing additional status 1 characteristic
 	*/
 	additionalStatus1Char := s.AddCharacteristic(attrAdditionalStatus1CharacteristicsUUID)
-	additionalStatus1Char.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Additional Status 1 Char Read Request")
-		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xb8, 0xb, 0x0, 0x0, 0x0})
+	additionalStatus1Char.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Status 1 Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Sending Additional Status 1 Notification from goroutine")				
+				n.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xb8, 0xb, 0x0, 0x0, 0x0})
+				time.Sleep(500 * time.Millisecond)
+			}
+		}()	
 	})
-
-	additionalStatus1Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional status 2 characteristic
 	*/
 	additionalStatus2Char := s.AddCharacteristic(attrAdditionalStatus2CharacteristicsUUID)
-	additionalStatus2Char.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Additional Status 2 Status Char Read Request")
-		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+	additionalStatus2Char.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Status 2 Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Sending Additional Status 2 Notification from goroutine")
+				byteArray := make([]byte, 1)
+				rand.Read(byteArray)				
+				n.Write([]byte{byteArray[0], 0x1, 0x2, 0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+				time.Sleep(500 * time.Millisecond)
+			}
+		}()	
 	})
 
-	additionalStatus2Char.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing general status and additional status sample rate characteristic 0x0034
 	*/
@@ -77,106 +96,135 @@ func NewRowingService() *gatt.Service {
 		rsp.Write(data)
 	})
 
+	sampleRateChar.HandleWriteFunc(func(req gatt.Request, data []byte) (status byte) {
+		logrus.Info("Sample Rate Char Write Request: ", string(data))
+		if (len(data) > 1){
+			logrus.Error("Sample Rate Char Write Request received more than one byte")
+		}
+		return gatt.StatusSuccess
+	})
+
 	/*
 		C2 rowing stroke data  characteristic 0x0035
 	*/
 	strokeDataChar := s.AddCharacteristic(attrStrokeDataCharacteristicsUUID)
-	strokeDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Stroke Data char Read Request")
-		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+	strokeDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Stroke Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Stroke Data Notification from goroutine")
+				n.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+				time.Sleep(1000 * time.Millisecond)
+			}
+		}()	
 	})
-
-	strokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional stroke data characteristic 0x0036
 	*/
 	additionalStrokeDataChar := s.AddCharacteristic(attrAdditionalStrokeDataCharacteristicsUUID)
-	additionalStrokeDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Additional Stroke Data char Read Request")
-		rsp.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff})
+	additionalStrokeDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Stroke Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Stroke Data Notification from goroutine")
+				n.Write([]byte{0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff})
+				time.Sleep(1000 * time.Millisecond)
+			}
+		}()	
 	})
-
-	additionalStrokeDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing split/interval data characteristic
 	*/
 	splitIntervalDataChar := s.AddCharacteristic(attrSplitIntervalDataCharacteristicsUUID)
-	splitIntervalDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Split/Interval Data char Read Request")
-		data := make([]byte, 18)
-		rsp.Write(data)
+	splitIntervalDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Split/Interval Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Split/Interval Data Notification from goroutine")
+				n.Write(make([]byte, 18))
+				time.Sleep(50000 * time.Millisecond)
+			}
+		}()	
 	})
 
-	splitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing additional split/interval data characteristic
 	*/
 	additionalSplitIntervalDataChar := s.AddCharacteristic(attrAdditionalSplitIntervalDataCharacteristicsUUID)
-	additionalSplitIntervalDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Additional Split/Interval Data char Read Request")
-		data := make([]byte, 18)
-		rsp.Write(data)
+	additionalSplitIntervalDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Additional Split/Interval Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Additional Split/Interval Data Notification from goroutine")
+				n.Write(make([]byte, 18))
+				time.Sleep(50000 * time.Millisecond)
+			}
+		}()	
 	})
 
-	additionalSplitIntervalDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing end of workout summary data characteristic
 	*/
 	endOfWorkoutSummaryDataChar := s.AddCharacteristic(attrEndOfWorkoutSummaryDataCharacteristicsUUID)
-	endOfWorkoutSummaryDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("End of workout summary Data char Read Request")
-		data := make([]byte, 20)
-		rsp.Write(data)
+	endOfWorkoutSummaryDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("End of workout summary Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				time.Sleep(200000 * time.Millisecond)
+				logrus.Info("End of workout summary Data Notification from goroutine")
+				n.Write(make([]byte, 20))
+			}
+		}()	
 	})
 
-	endOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 	/*
 		C2 rowing end of workout additional summary data characteristic
 	*/
 	additionalEndOfWorkoutSummaryDataChar := s.AddCharacteristic(attrAdditionalEndOfWorkoutSummaryDataCharacteristicsUUID)
-	additionalEndOfWorkoutSummaryDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Additional End of workout summary Data char Read Request")
-		data := make([]byte, 19)
-		rsp.Write(data)
+	additionalEndOfWorkoutSummaryDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("End of workout Additional summary Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				time.Sleep(200000 * time.Millisecond)
+				logrus.Info("End of workout Additional summary Data Notification from goroutine")
+				n.Write(make([]byte, 20))
+			}
+		}()	
 	})
 
-	additionalEndOfWorkoutSummaryDataChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 rowing heart rate belt information characteristic
 	*/
 	heartRateBeltInfoChar := s.AddCharacteristic(attrHeartRateBeltInfoCharacteristicsUUID)
-	//handle read
-	heartRateBeltInfoChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Heart Rate Belt Info Read Request")
-		data := make([]byte, 6)
-		rsp.Write(data)
-	})
+	heartRateBeltInfoChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Heart Rate Belt Info Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Heart Rate Belt Data Notification from goroutine")
+				n.Write(make([]byte, 6))
+				time.Sleep(100000 * time.Millisecond)
 
-	//handle write
-	heartRateBeltInfoChar.HandleWriteFunc(func(req gatt.Request, data []byte) (status byte) {
-		logrus.Info("received data at heart rate belt info: ", string(data))
-		return gatt.StatusSuccess
+			}
+		}()	
 	})
-
-	heartRateBeltInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	/*
 		C2 force curve data characteristic
 	*/
 	forceCurveDataChar := s.AddCharacteristic(attrForceCurveDataCharacteristicsUUID)
-	forceCurveDataChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Force Curve Data Read Request")
-		data := make([]byte, 288)
-		rsp.Write(data)
-	})
-
-	forceCurveDataChar.HandleWriteFunc(func(req gatt.Request, data []byte) (status byte) {
-		logrus.Info("received data at force curve data: ", string(data))
-		return gatt.StatusSuccess
+	forceCurveDataChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
+		logrus.Info("Force Curve Data Char Notify Request - launching goroutine")
+		go func() {
+			for true {
+				logrus.Info("Force Curve Data Notification from goroutine")
+				n.Write([]byte{0b000101001, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0})
+				time.Sleep(1000 * time.Millisecond)
+			}
+		}()	
 	})
 
 	/*
@@ -185,11 +233,6 @@ func NewRowingService() *gatt.Service {
 		0x0080 | Up to 20 bytes | READ Permission
 	*/
 	multiplexedInfoChar := s.AddCharacteristic(attrMultiplexedInfoCharacteristicsUUID)
-	multiplexedInfoChar.HandleReadFunc(func(rsp gatt.ResponseWriter, req *gatt.ReadRequest) {
-		logrus.Info("Multiplexed Info Char")
-		m:=mux.Multiplexer{}
-		rsp.Write(m.HandleC2RowingGeneralStatus([]byte{}))
-	})
 
 	multiplexedInfoChar.HandleNotifyFunc(func(r gatt.Request, n gatt.Notifier) {
 		logrus.Info("Multiplex Info Char Notify Func")
@@ -198,7 +241,6 @@ func NewRowingService() *gatt.Service {
 		n.Write(m.HandleC2RowingGeneralStatus([]byte{}))
 	})
 
-	multiplexedInfoChar.AddDescriptor(attrGeneralStatusDescriptorUUID).SetValue([]byte{})
 
 	return s
 }

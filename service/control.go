@@ -16,7 +16,6 @@ var (
 	attrControlServiceUUID, _          = gatt.ParseUUID(getFullUUID("0020"))
 	attrReceiveCharacteristicsUUID, _  = gatt.ParseUUID(getFullUUID("0021"))
 	attrTransmitCharacteristicsUUID, _ = gatt.ParseUUID(getFullUUID("0022"))
-	attrTransmitDescriptorUUID, _      = gatt.ParseUUID(getFullUUID("2902"))
 )
 
 //NewControlService advertises Control service offered by PM5
@@ -66,7 +65,6 @@ func NewControlService() *gatt.Service {
 		resp.Write(data)
 	})
 
-	transmitChar.AddDescriptor(attrTransmitDescriptorUUID).SetValue([]byte{})
 
 	return controlService
 }
