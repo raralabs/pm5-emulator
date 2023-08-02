@@ -3,9 +3,10 @@ package emulator
 import (
 	"log"
 	"pm5-emulator/sm"
+	"config/option"
+
 
 	"github.com/bettercap/gatt"
-	"github.com/bettercap/gatt/examples/option"
 )
 
 //NewEmulator factory methods initializes emulator
