@@ -3,7 +3,7 @@ package emulator
 import (
 	"log"
 	"pm5-emulator/sm"
-	"config/option"
+	"pm5-emulator/config/option"
 
 
 	"github.com/bettercap/gatt"
